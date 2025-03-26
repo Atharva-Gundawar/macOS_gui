@@ -10,8 +10,6 @@ import signal
 import sys
 import subprocess
 
-log_file = "/Users/atharvagundawar/Desktop/0_MyProjects/mcp_gui/mcp_gui/server.log"
-
 def get_center_point(bbox):
     """Calculate center point from bounding box coordinates."""
     x1, y1, x2, y2 = bbox
@@ -26,13 +24,18 @@ def extract_elements(tree):
     """
     buttons = []
     text_areas = []
+    
+    # "0.00;37.00",
+    window_absolute_position = tree['absolute_position'].split(',')
+    window_x = float(window_absolute_position[0])
+    window_y = float(window_absolute_position[1])
 
     def traverse(node):
         # Check if node is a button
         if node.get('role') in ['AXButton', 'AXMenuButton'] and 'visible_bbox' in node:
             center = get_center_point(node['visible_bbox'])
             buttons.append({
-                'center': center,
+                'center': (center[0] + window_x, center[1] + window_y),
                 'description': node.get('description'),
                 'role_description': node.get('role_description')
             })
@@ -41,7 +44,7 @@ def extract_elements(tree):
         elif node.get('role') == 'AXTextArea' and 'visible_bbox' in node:
             center = get_center_point(node['visible_bbox'])
             text_areas.append({
-                'center': center,
+                'center': (center[0] + window_x, center[1] + window_y),
                 'description': node.get('description'),
                 'role_description': node.get('role_description')
             })
