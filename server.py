@@ -25,7 +25,6 @@ def extract_elements(tree):
     buttons = []
     text_areas = []
     
-    # "0.00;37.00",
     window_absolute_position = tree['absolute_position'].split(',')
     window_x = float(window_absolute_position[0])
     window_y = float(window_absolute_position[1])
